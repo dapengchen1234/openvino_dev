@@ -238,6 +238,7 @@ macro(ov_install_static_lib target comp)
         if(${target_type} STREQUAL "STATIC_LIBRARY")
             set_target_properties(${target} PROPERTIES EXCLUDE_FROM_ALL FALSE)
         endif()
+      
         install(TARGETS ${target} EXPORT OpenVINOTargets
                 ARCHIVE DESTINATION ${OV_CPACK_ARCHIVEDIR} COMPONENT ${comp} ${ARGN})
     endif()

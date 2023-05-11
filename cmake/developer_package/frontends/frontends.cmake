@@ -39,7 +39,7 @@ function(ov_generate_frontends_hpp)
 
     set(ov_frontends_hpp "${CMAKE_BINARY_DIR}/src/frontends/common/src/ov_frontends.hpp")
     set(frontends_hpp_in "${IEDevScripts_DIR}/frontends/ov_frontends.hpp.in")
-
+    
     add_custom_command(OUTPUT "${ov_frontends_hpp}"
                        COMMAND
                         "${CMAKE_COMMAND}"

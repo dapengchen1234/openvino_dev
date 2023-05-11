@@ -30,6 +30,7 @@ find_package(IEDevScripts REQUIRED
              NO_DEFAULT_PATH)
 
 include(cmake/features.cmake)
+# These options are shared with 3rdparty plugins by means of developer packager
 include(cmake/dependencies.cmake)
 
 
@@ -92,7 +93,10 @@ function(openvino_developer_export_targets)
         message(FATAL_ERROR "openvino_developer_export_targets has unparsed arguments: ${EXPORT_UNPARSED_ARGUMENTS}")
     endif()
 
+    # set(${EXPORT_COMPONENT} "${${EXPORT_COMPONENT}};${EXPORT_TARGETS}")
     set(${EXPORT_COMPONENT} "${${EXPORT_COMPONENT}};${EXPORT_TARGETS}")
+    
+
 
     # to allow exporting of aliased targets with the original names
     foreach(target_name IN LISTS ${EXPORT_COMPONENT})
@@ -117,6 +121,10 @@ function(openvino_developer_export_targets)
         "A list of OpenVINO exported components" FORCE)
 endfunction()
 
+
+
+
+
 # add target with processed tests model zoo 
 add_subdirectory(thirdparty)
 add_subdirectory(src)
@@ -132,7 +140,7 @@ add_subdirectory(src)
 
 
 
-# include(cmake/extra_modules.cmake)
+include(cmake/extra_modules.cmake)
 # # provides a callback function to describe each component in repo
 # include(cmake/packaging/packaging.cmake)
 # ie_cpack(${IE_CPACK_COMPONENTS_ALL})
