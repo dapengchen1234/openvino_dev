@@ -89,30 +89,10 @@ install(TARGETS ${TARGET_NAME} EXPORT OpenVINOTargets
 
 # OpenVINO runtime library dev
 
-#
-# Add openvin::dev target
-#
 
-add_library(${TARGET_NAME}_dev INTERFACE)
-add_library(openvino::runtime::dev ALIAS ${TARGET_NAME}_dev)
 
-target_include_directories(${TARGET_NAME}_dev INTERFACE
-    $<BUILD_INTERFACE:${OpenVINO_SOURCE_DIR}/src/inference/dev_api>
-    $<BUILD_INTERFACE:${OpenVINO_SOURCE_DIR}/src/common/low_precision_transformations/include>
-    $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_INCLUDE_DIRECTORIES>)
 
-target_compile_definitions(${TARGET_NAME}_dev INTERFACE
-    $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_COMPILE_DEFINITIONS>)
 
-target_link_libraries(${TARGET_NAME}_dev INTERFACE ${TARGET_NAME} openvino::core::dev)
-
-set_ie_threading_interface_for(${TARGET_NAME}_dev)
-set_target_properties(${TARGET_NAME}_dev PROPERTIES EXPORT_NAME runtime::dev)
-
-openvino_developer_export_targets(COMPONENT core TARGETS openvino::runtime::dev)
-
-# Install static libraries for case BUILD_SHARED_LIBS=OFF
-ov_install_static_lib(${TARGET_NAME}_dev ${OV_CPACK_COMP_CORE})
 
 #
 # Install OpenVINO runtime

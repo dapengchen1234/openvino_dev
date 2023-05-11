@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-
 add_subdirectory(util)
 add_subdirectory(itt)
 add_subdirectory(conditional_compilation)
+add_subdirectory(preprocessing)
 
 
 
@@ -13,6 +13,6 @@ add_subdirectory(conditional_compilation)
 #     add_subdirectory(snippets)
 # endif()
 
-add_subdirectory(transformations)
+# add_subdirectory(transformations)
 # add_subdirectory(offline_transformations)
-add_subdirectory(low_precision_transformations)
+# add_subdirectory(low_precision_transformations)
