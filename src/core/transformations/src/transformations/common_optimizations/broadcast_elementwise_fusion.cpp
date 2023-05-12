@@ -4,11 +4,12 @@
 
 #include "transformations/common_optimizations/broadcast_elementwise_fusion.hpp"
 
-#include <ngraph/ngraph.hpp>
+// #include <ngraph/ngraph.hpp>
+#include <ngraph/op/util/binary_elementwise_arithmetic.hpp>
 #include <ngraph/pattern/op/wrap_type.hpp>
 #include <openvino/opsets/opset1.hpp>
 #include <openvino/opsets/opset5.hpp>
-
+#include <openvino/core/rt_info.hpp>
 #include "itt.hpp"
 
 namespace {

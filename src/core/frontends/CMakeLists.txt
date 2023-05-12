@@ -8,9 +8,9 @@ add_subdirectory(common)
 #     add_subdirectory(tests)
 # endif()
 
-if(ENABLE_OV_IR_FRONTEND)
-    add_subdirectory(ir)
-endif()
+# if(ENABLE_OV_IR_FRONTEND)
+#     add_subdirectory(ir)
+# endif()
 
 # if(ENABLE_OV_ONNX_FRONTEND)
 #     add_subdirectory(onnx)

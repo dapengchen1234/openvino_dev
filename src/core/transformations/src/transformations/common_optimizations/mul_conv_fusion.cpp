@@ -5,7 +5,8 @@
 #include "transformations/common_optimizations/mul_conv_fusion.hpp"
 
 #include <memory>
-#include <ngraph/ngraph.hpp>
+// #include <ngraph/ngraph.hpp>
+#include <ngraph/validation_util.hpp>
 #include <ngraph/pattern/matcher.hpp>
 #include <ngraph/pattern/op/wrap_type.hpp>
 #include <ngraph/rt_info.hpp>

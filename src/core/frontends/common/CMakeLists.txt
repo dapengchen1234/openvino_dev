@@ -20,7 +20,14 @@ source_group("public include" FILES ${LIBRARY_PUBLIC_HEADERS})
 
 # create library
 
+
+
+
 add_library(${TARGET_NAME}_obj OBJECT ${LIBRARY_SRC} ${LIBRARY_HEADERS} ${LIBRARY_PUBLIC_HEADERS})
+
+if(NOT BUILD_SHARED_LIBS)
+    ov_generate_frontends_hpp()
+endif()
 
 target_include_directories(${TARGET_NAME}_obj
     PUBLIC
@@ -54,6 +61,8 @@ endif()
 target_compile_definitions(${TARGET_NAME}_obj PRIVATE
     FRONTEND_LIB_PREFIX="${CMAKE_SHARED_LIBRARY_PREFIX}${FRONTEND_NAME_PREFIX}"
     FRONTEND_LIB_SUFFIX="${FRONTEND_LIB_SUFFIX}")
+
+
 
 # add_clang_format_target(${TARGET_NAME}_clang FOR_TARGETS ${TARGET_NAME}_obj)
 

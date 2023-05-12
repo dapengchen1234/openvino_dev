@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "ie_blob.h"
+#include "ie/ie_blob.h"
 #include "openvino/runtime/itensor.hpp"
 
 namespace ov {

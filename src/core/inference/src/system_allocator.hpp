@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "ie_allocator.hpp"
+#include "ie/ie_allocator.hpp"
 
 namespace InferenceEngine {
 class SystemMemoryAllocator : public InferenceEngine::IAllocator {

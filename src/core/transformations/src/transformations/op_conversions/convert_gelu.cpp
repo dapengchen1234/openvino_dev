@@ -3,7 +3,8 @@
 //
 
 #include <memory>
-#include <ngraph/ngraph.hpp>
+// #include <ngraph/ngraph.hpp>
+#include <ngraph/validation_util.hpp>
 #include <ngraph/pattern/op/wrap_type.hpp>
 #include <ngraph/rt_info.hpp>
 #include <transformations/op_conversions/convert_gelu.hpp>

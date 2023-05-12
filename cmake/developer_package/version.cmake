@@ -72,7 +72,7 @@ macro(ov_parse_ci_build_number)
             return()
         endif()
 
-        set(ie_version_hpp "${OpenVINO_SOURCE_DIR}/src/inference/include/ie/ie_version.hpp")
+        set(ie_version_hpp "${OpenVINO_SOURCE_DIR}/src/core/inference/include/ie/ie_version.hpp")
         if(NOT EXISTS ${ie_version_hpp})
             message(FATAL_ERROR "File ie_version.hpp with IE_VERSION definitions is not found")
         endif()

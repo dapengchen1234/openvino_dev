@@ -19,66 +19,94 @@ endif()
 
 
 
-
-file(GLOB_RECURSE LIBRARY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-                              ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp)
-file(GLOB_RECURSE PUBLIC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp)
-
-
-set(MIXED_SRC
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/allocator.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/itensor.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/ov_tensor.cpp")
-
-set_property(SOURCE ${MIXED_SRC}
-    APPEND PROPERTY INCLUDE_DIRECTORIES
-        $<TARGET_PROPERTY:inference_engine_obj,SOURCE_DIR>/src
-        $<TARGET_PROPERTY:inference_engine_plugin_api,INTERFACE_INCLUDE_DIRECTORIES>)
-
-# Create named folders for the sources within the .vcproj
-# Empty name lists them directly under the .vcproj
-
-source_group("src" FILES ${LIBRARY_SRC})
-source_group("include" FILES ${PUBLIC_HEADERS})
-
-
-
-
 add_subdirectory(dev_api)
 add_subdirectory(builder)
 add_subdirectory(reference)
 add_subdirectory(shape_inference)
-
-
-#
-# Add openvin::dev target
-#
-
-add_library(${TARGET_NAME}_dev INTERFACE)
-add_library(openvino::runtime::dev ALIAS ${TARGET_NAME}_dev)
-
-target_include_directories(${TARGET_NAME}_dev INTERFACE
-    $<BUILD_INTERFACE:${OpenVINO_SOURCE_DIR}/src/inference/dev_api>
-    $<BUILD_INTERFACE:${OpenVINO_SOURCE_DIR}/src/core/low_precision_transformations/include>
-    $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_INCLUDE_DIRECTORIES>)
-
-target_compile_definitions(${TARGET_NAME}_dev INTERFACE
-    $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_COMPILE_DEFINITIONS>)
-
-target_link_libraries(${TARGET_NAME}_dev INTERFACE ${TARGET_NAME} openvino::core::dev)
-
-set_ie_threading_interface_for(${TARGET_NAME}_dev)
-set_target_properties(${TARGET_NAME}_dev PROPERTIES EXPORT_NAME runtime::dev)
-openvino_developer_export_targets(COMPONENT core TARGETS openvino::runtime::dev)
-
-# Install static libraries for case BUILD_SHARED_LIBS=OFF
-
-ov_install_static_lib(${TARGET_NAME}_dev ${OV_CPACK_COMP_CORE})
-
-
-
 add_subdirectory(frontends)
-message("here to go")
+add_subdirectory(inference)
+add_subdirectory(transformations)
+
+
+file(GLOB_RECURSE LIBRARY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE LIBRARY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp)
+file(GLOB_RECURSE PUBLIC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp)
+set(NGRAPH_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+source_group("src" FILES ${LIBRARY_SRC})
+source_group("include" FILES ${LIBRARY_HEADERS})
+source_group("public include" FILES ${LIBRARY_PUBLIC_HEADERS})
+
+add_library(ngraph_obj OBJECT ${LIBRARY_SRC} ${LIBRARY_HEADERS} ${LIBRARY_PUBLIC_HEADERS})
+
+target_include_directories(ngraph_obj
+    PUBLIC
+        $<BUILD_INTERFACE:${NGRAPH_INCLUDE_DIR}>
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/transformations/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/inference/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/inference/src
+        )
+        
+
+target_link_libraries(ngraph_obj PRIVATE ngraph::builder        
+ngraph::reference openvino::util openvino::pugixml 
+ov_shape_inference openvino::core::dev openvino::itt)
+target_compile_definitions(ngraph_obj PRIVATE IMPLEMENT_OPENVINO_API )
+target_compile_definitions(ngraph_obj PRIVATE CI_BUILD_NUMBER="${CI_BUILD_NUMBER}")
+
+ie_mark_target_as_cc(ngraph_obj)
+
+
+
+# set(MIXED_SRC
+#     "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/allocator.cpp"
+#     "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/itensor.cpp"
+#     "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/ov_tensor.cpp")
+
+# set_property(SOURCE ${MIXED_SRC}
+#     APPEND PROPERTY INCLUDE_DIRECTORIES
+#         ${OpenVINO_SOURCE_DIR}/src/core/inference/src)
+
+# Create named folders for the sources within the .vcproj
+# Empty name lists them directly under the .vcproj
+
+# source_group("src" FILES ${LIBRARY_SRC})
+# source_group("include" FILES ${PUBLIC_HEADERS})
+# add_library(ngraph_obj OBJECT ${LIBRARY_SRC})
+
+# target_include_directories(ngraph_obj, PUBLIC ${PUBLIC_HEADERS})
+# target_link_libraries(ngraph_obj PRIVATE ngraph::builder        
+# ngraph::reference openvino::util openvino::pugixml 
+# ov_shape_inference openvino::core::dev)
+# target_compile_definitions(ngraph_obj PRIVATE IMPLEMENT_OPENVINO_API)
+
+
+
+# #
+# # Add openvin::dev target
+# #
+# set(TARGET_NAME openvino)
+# add_library(${TARGET_NAME}_dev INTERFACE)
+# add_library(openvino::runtime::dev ALIAS ${TARGET_NAME}_dev)
+
+# target_include_directories(${TARGET_NAME}_dev INTERFACE
+#     $<BUILD_INTERFACE:${OpenVINO_SOURCE_DIR}/src/inference/dev_api>
+#     $<BUILD_INTERFACE:${OpenVINO_SOURCE_DIR}/src/core/low_precision_transformations/include>
+#     $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_INCLUDE_DIRECTORIES>)
+
+# target_compile_definitions(${TARGET_NAME}_dev INTERFACE
+#     $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_COMPILE_DEFINITIONS>)
+
+# target_link_libraries(${TARGET_NAME}_dev INTERFACE ${TARGET_NAME} openvino::core::dev)
+
+# set_ie_threading_interface_for(${TARGET_NAME}_dev)
+# set_target_properties(${TARGET_NAME}_dev PROPERTIES EXPORT_NAME runtime::dev)
+# openvino_developer_export_targets(COMPONENT core TARGETS openvino::runtime::dev)
+
+# # Install static libraries for case BUILD_SHARED_LIBS=OFF
+
+# ov_install_static_lib(${TARGET_NAME}_dev ${OV_CPACK_COMP_CORE})
 
 
 
@@ -86,7 +114,33 @@ message("here to go")
 
 
 
+# if(ENABLE_SYSTEM_PUGIXML)
+#     set_target_properties(ngraph_obj PROPERTIES NO_SYSTEM_FROM_IMPORTED ON)
+# endif()
+# target_compile_definitions(ngraph_obj PRIVATE IMPLEMENT_OPENVINO_API)
 
+# # ov_add_version_defines(src/version.cpp ngraph_obj)
+# target_link_libraries(ngraph_obj PRIVATE ngraph::builder        
+# ngraph::reference openvino::util openvino::pugixml 
+# ov_shape_inference)
+
+
+# target_link_libraries(ngraph_obj PRIVATE ngraph::builder        
+# ngraph::reference openvino::util openvino::pugixml 
+# ov_shape_inference openvino::core::dev)
+
+
+
+# ie_mark_target_as_cc(ngraph_obj)
+
+# ov_ncc_naming_style(FOR_TARGET ngraph_obj
+#                     SOURCE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
+# add_clang_format_target(ngraph_clang FOR_TARGETS ngraph_obj)
+
+# if(NOT BUILD_SHARED_LIBS)
+#     target_compile_definitions(ngraph_obj PUBLIC OPENVINO_STATIC_LIBRARY)
+# endif()
 
 
 

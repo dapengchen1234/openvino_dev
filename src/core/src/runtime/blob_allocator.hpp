@@ -4,7 +4,7 @@
 
 #include <unordered_map>
 
-#include "ie_allocator.hpp"  // IE public header
+#include "ie/ie_allocator.hpp"  // IE public header
 #include "openvino/core/except.hpp"
 #include "openvino/runtime/allocator.hpp"
 #include "openvino/runtime/common.hpp"
