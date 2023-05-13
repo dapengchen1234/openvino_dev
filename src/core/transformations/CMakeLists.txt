@@ -27,7 +27,7 @@ ie_faster_build(${TARGET_NAME}_obj
 
 target_link_libraries(${TARGET_NAME}_obj PRIVATE ngraph_reference openvino::itt ngraph::builder openvino::core::dev ov_shape_inference)
 
-target_include_directories(${TARGET_NAME}_obj PRIVATE $<BUILD_INTERFACE:${PUBLIC_HEADERS_DIR}>
+target_include_directories(${TARGET_NAME}_obj PUBLIC $<BUILD_INTERFACE:${PUBLIC_HEADERS_DIR}>
                                                      "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 add_clang_format_target(${TARGET_NAME}_clang FOR_TARGETS ${TARGET_NAME}_obj)
@@ -38,34 +38,37 @@ if(NOT BUILD_SHARED_LIBS)
     target_compile_definitions(${TARGET_NAME}_obj PUBLIC OPENVINO_STATIC_LIBRARY)
 endif()
 
-# INTERFACE library for BW compatibility
 
-add_library(${TARGET_NAME} INTERFACE)
 
-target_include_directories(${TARGET_NAME} INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:$<TARGET_PROPERTY:ngraph,INTERFACE_INCLUDE_DIRECTORIES>>)
 
-target_link_libraries(${TARGET_NAME} INTERFACE openvino::runtime)
+# # INTERFACE library for BW compatibility
 
-# LTO
+# add_library(${TARGET_NAME} INTERFACE)
 
-set_target_properties(${TARGET_NAME}_obj PROPERTIES INTERPROCEDURAL_OPTIMIZATION_RELEASE ${ENABLE_LTO})
+# target_include_directories(${TARGET_NAME} INTERFACE
+#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#     $<BUILD_INTERFACE:$<TARGET_PROPERTY:ngraph,INTERFACE_INCLUDE_DIRECTORIES>>)
 
-# developer package
+# target_link_libraries(${TARGET_NAME} INTERFACE openvino::runtime)
 
-openvino_developer_export_targets(COMPONENT core_legacy TARGETS ${TARGET_NAME})
+# # LTO
 
-# temporary workaround for fatal error LNK1248: image size (1004722F6) exceeds maximum
-# allowable size (FFFFFFFF)
-# the symbolic debugging information will be stored in a separate .pdb file.
-if(WIN32)
-    string(REPLACE "/Z7" "/Zi" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
-    string(REPLACE "/Z7" "/Zi" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-    string(REPLACE "/Z7" "/Zi" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
-    string(REPLACE "/Z7" "/Zi" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-endif()
+# set_target_properties(${TARGET_NAME}_obj PROPERTIES INTERPROCEDURAL_OPTIMIZATION_RELEASE ${ENABLE_LTO})
 
-if(ENABLE_TESTS)
-    add_subdirectory(tests)
-endif()
+# # developer package
+
+# openvino_developer_export_targets(COMPONENT core_legacy TARGETS ${TARGET_NAME})
+
+# # temporary workaround for fatal error LNK1248: image size (1004722F6) exceeds maximum
+# # allowable size (FFFFFFFF)
+# # the symbolic debugging information will be stored in a separate .pdb file.
+# if(WIN32)
+#     string(REPLACE "/Z7" "/Zi" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+#     string(REPLACE "/Z7" "/Zi" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+#     string(REPLACE "/Z7" "/Zi" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+#     string(REPLACE "/Z7" "/Zi" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+# endif()
+
+# if(ENABLE_TESTS)
+#     add_subdirectory(tests)
+# endif()

@@ -27,13 +27,14 @@ add_library(${TARGET_NAME}_obj OBJECT
 
 target_compile_definitions(${TARGET_NAME}_obj PRIVATE IMPLEMENT_OPENVINO_API)
 
-ie_faster_build(${TARGET_NAME}_obj UNITY)
+# ie_faster_build(${TARGET_NAME}_obj UNITY)
 
 target_link_libraries(${TARGET_NAME}_obj PRIVATE openvino::itt)
 
 target_include_directories(${TARGET_NAME}_obj PRIVATE $<BUILD_INTERFACE:${PUBLIC_HEADERS_DIR}>
-    $<BUILD_INTERFACE:$<TARGET_PROPERTY:ngraph,INTERFACE_INCLUDE_DIRECTORIES>>
-    $<BUILD_INTERFACE:$<TARGET_PROPERTY:inference_engine_transformations,INTERFACE_INCLUDE_DIRECTORIES>>)
+    $<BUILD_INTERFACE:${OV_CORE_INCLUDE_PATH}>
+    $<BUILD_INTERFACE:$<TARGET_PROPERTY:inference_engine_transformations_obj,INTERFACE_INCLUDE_DIRECTORIES>>)
+   # $<BUILD_INTERFACE:$<TARGET_PROPERTY:ngraph,INTERFACE_INCLUDE_DIRECTORIES>>
 
 add_cpplint_target(${TARGET_NAME}_cpplint FOR_TARGETS ${TARGET_NAME}_obj)
 
@@ -43,24 +44,25 @@ if(NOT BUILD_SHARED_LIBS)
     target_compile_definitions(${TARGET_NAME}_obj PUBLIC OPENVINO_STATIC_LIBRARY)
 endif()
 
-# INTERFACE library for BW compatibility
+# # INTERFACE library for BW compatibility
 
-add_library(${TARGET_NAME} INTERFACE)
-target_link_libraries(${TARGET_NAME} INTERFACE openvino::runtime)
+# add_library(${TARGET_NAME} INTERFACE)
+# target_link_libraries(${TARGET_NAME} INTERFACE openvino::runtime)
 
-target_include_directories(${TARGET_NAME} INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:$<TARGET_PROPERTY:ngraph,INTERFACE_INCLUDE_DIRECTORIES>>
-    $<BUILD_INTERFACE:$<TARGET_PROPERTY:inference_engine_transformations,INTERFACE_INCLUDE_DIRECTORIES>>)
+# target_include_directories(${TARGET_NAME} INTERFACE
+#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#     $<BUILD_INTERFACE:$<TARGET_PROPERTY:inference_engine_transformations,INTERFACE_INCLUDE_DIRECTORIES>>)
+#    # $<BUILD_INTERFACE:$<TARGET_PROPERTY:ngraph,INTERFACE_INCLUDE_DIRECTORIES>>
 
-# LTO
 
-set_target_properties(${TARGET_NAME}_obj PROPERTIES INTERPROCEDURAL_OPTIMIZATION_RELEASE ${ENABLE_LTO})
+# # LTO
 
-# developer package
+# set_target_properties(${TARGET_NAME}_obj PROPERTIES INTERPROCEDURAL_OPTIMIZATION_RELEASE ${ENABLE_LTO})
 
-openvino_developer_export_targets(COMPONENT core_legacy TARGETS ${TARGET_NAME})
+# # developer package
 
-if(ENABLE_TESTS)
-    add_subdirectory(tests)
-endif()
+# openvino_developer_export_targets(COMPONENT core_legacy TARGETS ${TARGET_NAME})
+
+# if(ENABLE_TESTS)
+#     add_subdirectory(tests)
+# endif()

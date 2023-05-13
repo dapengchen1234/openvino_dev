@@ -6,7 +6,7 @@
 
 #include <memory>
 #include <tuple>
-#include <ngraph/ngraph.hpp>
+////#include <ngraph/ngraph.hpp>
 #include <ngraph/opsets/opset1.hpp>
 #include <low_precision/lpt_visibility.hpp>
 

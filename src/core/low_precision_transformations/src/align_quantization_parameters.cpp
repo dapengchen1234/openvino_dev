@@ -4,6 +4,7 @@
 
 #include "low_precision/align_quantization_parameters.hpp"
 #include <memory>
+#include <ngraph/pass/manager.hpp>
 #include "low_precision/create_attribute.hpp"
 #include "low_precision/propagate_through_precision_preserved.hpp"
 #include "low_precision/rt_info/attribute_parameters.hpp"
@@ -11,6 +12,7 @@
 #include "low_precision/rt_info/quantization_granularity_attribute.hpp"
 #include "low_precision/update_shared_precision_preserved.hpp"
 #include "itt.hpp"
+
 
 using namespace ngraph;
 using namespace ngraph::pass::low_precision;

@@ -24,7 +24,10 @@
 #include "low_precision/rt_info/quantization_alignment_attribute.hpp"
 #include "ngraph/opsets/opset3.hpp"
 #include "ngraph/opsets/opset6.hpp"
+#include "ngraph/validation_util.hpp"
 #include "transformations/utils/utils.hpp"
+
+
 
 namespace ngraph {
 namespace pass {

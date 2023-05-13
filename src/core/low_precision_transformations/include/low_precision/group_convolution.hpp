@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <ngraph/ngraph.hpp>
+//#include<ngraph/ngraph.hpp>
 #include "convolution.hpp"
 
 namespace ngraph {

@@ -333,12 +333,15 @@ function(ov_generate_plugins_hpp)
         ov_target_link_plugins(inference_engine_s)
     endif()
 
+
+
     if(OV_GENERATOR_MULTI_CONFIG AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.20)
-        set(ov_plugins_hpp "${CMAKE_BINARY_DIR}/src/inference/$<CONFIG>/ov_plugins.hpp")
+        set(ov_plugins_hpp "${CMAKE_BINARY_DIR}/src/core/inference/$<CONFIG>/ov_plugins.hpp")
     else()
-        set(ov_plugins_hpp "${CMAKE_BINARY_DIR}/src/inference/ov_plugins.hpp")
+        set(ov_plugins_hpp "${CMAKE_BINARY_DIR}/src/core/inference/ov_plugins.hpp")
     endif()
     set(plugins_hpp_in "${IEDevScripts_DIR}/plugins/plugins.hpp.in")
+
 
     add_custom_command(OUTPUT "${ov_plugins_hpp}"
                        COMMAND
@@ -359,6 +362,7 @@ function(ov_generate_plugins_hpp)
 
     # for some reason dependency on source files does not work
     # so, we have to use explicit target and make it dependency for inference_engine_obj
+    message("ov_plugins_hpp: ${ov_plugins_hpp}")
     add_custom_target(_ov_plugins_hpp DEPENDS ${ov_plugins_hpp})
     add_dependencies(inference_engine_obj _ov_plugins_hpp)
 endfunction()

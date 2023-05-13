@@ -5,11 +5,13 @@
 #include "low_precision/align_quantization_intervals.hpp"
 #include <memory>
 #include <ngraph/opsets/opset1.hpp>
+#include <ngraph/pass/manager.hpp>
 #include "low_precision/create_attribute.hpp"
 #include "low_precision/propagate_through_precision_preserved.hpp"
 #include "low_precision/rt_info/intervals_alignment_attribute.hpp"
 #include "low_precision/rt_info/attribute_parameters.hpp"
 #include "itt.hpp"
+
 
 using namespace ngraph;
 using namespace ngraph::pass::low_precision;

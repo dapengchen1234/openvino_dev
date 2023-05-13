@@ -82,12 +82,22 @@ source_group("include" FILES ${LIBRARY_HEADERS} ${PUBLIC_HEADERS})
 
 add_library(${TARGET_NAME}_plugin_api INTERFACE)
 
-target_include_directories(${TARGET_NAME}_plugin_api INTERFACE
+# target_include_directories(${TARGET_NAME}_plugin_api INTERFACE
+#     $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_INCLUDE_DIRECTORIES>
+#     $<TARGET_PROPERTY:openvino::core::dev,INTERFACE_INCLUDE_DIRECTORIES>
+#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dev_api>
+#     $<BUILD_INTERFACE:${PUBLIC_HEADERS_DIR}>
+#     $<BUILD_INTERFACE:${PUBLIC_HEADERS_DIR}/ie>)
+
+
+    target_include_directories(${TARGET_NAME}_plugin_api INTERFACE
     $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:openvino::core::dev,INTERFACE_INCLUDE_DIRECTORIES>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/dev_api>
     $<BUILD_INTERFACE:${PUBLIC_HEADERS_DIR}>
     $<BUILD_INTERFACE:${PUBLIC_HEADERS_DIR}/ie>)
+
+
 
 target_compile_definitions(${TARGET_NAME}_plugin_api INTERFACE
     $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_COMPILE_DEFINITIONS>)
@@ -107,17 +117,15 @@ add_clang_format_target(${TARGET_NAME}_plugin_api_clang FOR_SOURCES ${plugin_api
 
 # # Create object library
 
-# add_library(${TARGET_NAME}_obj OBJECT
-#             ${IE_STATIC_DEPENDENT_FILES}
-#             ${LIBRARY_SRC}
-#             ${LIBRARY_HEADERS}
-#             ${PUBLIC_HEADERS})
-
-# ov_add_version_defines(src/ie_version.cpp ${TARGET_NAME}_obj)
-
-# if(NOT BUILD_SHARED_LIBS)
-#     target_compile_definitions(${TARGET_NAME}_obj PUBLIC OPENVINO_STATIC_LIBRARY)
-# endif()
+add_library(${TARGET_NAME}_obj OBJECT
+            ${IE_STATIC_DEPENDENT_FILES}
+            ${LIBRARY_SRC}
+            ${LIBRARY_HEADERS}
+            ${PUBLIC_HEADERS})
+ov_add_version_defines(src/ie_version.cpp ${TARGET_NAME}_obj)
+if(NOT BUILD_SHARED_LIBS)
+    target_compile_definitions(${TARGET_NAME}_obj PUBLIC OPENVINO_STATIC_LIBRARY)
+endif()
 
 # ie_faster_build(${TARGET_NAME}_obj
 #     UNITY PCH PRIVATE "src/precomp.hpp"
@@ -125,19 +133,23 @@ add_clang_format_target(${TARGET_NAME}_plugin_api_clang FOR_SOURCES ${plugin_api
 
 # target_compile_definitions(${TARGET_NAME}_obj PRIVATE
 #     IMPLEMENT_INFERENCE_ENGINE_API
-#     $<TARGET_PROPERTY:ngraph,INTERFACE_COMPILE_DEFINITIONS>
+#     # $<TARGET_PROPERTY:ngraph,INTERFACE_COMPILE_DEFINITIONS>
 #     $<TARGET_PROPERTY:frontend_common::static,INTERFACE_COMPILE_DEFINITIONS>
 #     $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_COMPILE_DEFINITIONS>)
 
-# target_include_directories(${TARGET_NAME}_obj SYSTEM PRIVATE
-#     $<TARGET_PROPERTY:ngraph,INTERFACE_INCLUDE_DIRECTORIES>
-#     $<TARGET_PROPERTY:openvino::pugixml,INTERFACE_INCLUDE_DIRECTORIES>
-#     $<TARGET_PROPERTY:frontend_common::static,INTERFACE_INCLUDE_DIRECTORIES>
-#     $<TARGET_PROPERTY:xbyak,INTERFACE_INCLUDE_DIRECTORIES>)
+target_compile_definitions(${TARGET_NAME}_obj PRIVATE
+    IMPLEMENT_INFERENCE_ENGINE_API
+    $<TARGET_PROPERTY:frontend_common_obj,INTERFACE_COMPILE_DEFINITIONS>
+    $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_COMPILE_DEFINITIONS>)
+                       
+target_include_directories(${TARGET_NAME}_obj SYSTEM PRIVATE
+   $<BUILD_INTERFACE:${OV_CORE_INCLUDE_PATH}
+    $<TARGET_PROPERTY:openvino::pugixml,INTERFACE_INCLUDE_DIRECTORIES>
+    $<BUILD_INTERFACE:${FRONTEND_INCLUDE_DIR}
+    $<TARGET_PROPERTY:xbyak,INTERFACE_INCLUDE_DIRECTORIES>)
 
 # target_include_directories(${TARGET_NAME}_obj PRIVATE
 #     "${CMAKE_CURRENT_SOURCE_DIR}/src"
-#     # for ov_plugins.hpp
 #     $<IF:$<AND:$<BOOL:${OV_GENERATOR_MULTI_CONFIG}>,$<VERSION_GREATER_EQUAL:${CMAKE_VERSION},3.20>>,${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>,${CMAKE_CURRENT_BINARY_DIR}>
 #     # for ie_ir_version.hpp
 #     $<$<TARGET_EXISTS:inference_engine_ir_v7_reader>:$<TARGET_PROPERTY:inference_engine_ir_v7_reader,SOURCE_DIR>>
@@ -145,13 +157,27 @@ add_clang_format_target(${TARGET_NAME}_plugin_api_clang FOR_SOURCES ${plugin_api
 #     $<TARGET_PROPERTY:${TARGET_NAME}_transformations,INTERFACE_INCLUDE_DIRECTORIES>
 #     $<TARGET_PROPERTY:${TARGET_NAME}_plugin_api,INTERFACE_INCLUDE_DIRECTORIES>)
 
-# target_link_libraries(${TARGET_NAME}_obj PRIVATE openvino::itt openvino::util openvino::core::dev)
-# ie_mark_target_as_cc(${TARGET_NAME}_obj)
 
-# set_ie_threading_interface_for(${TARGET_NAME}_obj)
-# if (TBBBIND_2_5_FOUND)
-#     target_link_libraries(${TARGET_NAME}_obj PRIVATE ${TBBBIND_2_5_IMPORTED_TARGETS})
-# endif()
+target_include_directories(${TARGET_NAME}_obj PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+     $<TARGET_PROPERTY:${TARGET_NAME}_transformations_obj,INTERFACE_INCLUDE_DIRECTORIES>
+     "${OpenVINO_SOURCE_DIR}/src/plugins/intel_gna/legacy/include"
+     $<IF:$<AND:$<BOOL:${OV_GENERATOR_MULTI_CONFIG}>,$<VERSION_GREATER_EQUAL:${CMAKE_VERSION},3.20>>,${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>,${CMAKE_CURRENT_BINARY_DIR}>
+     $<TARGET_PROPERTY:${TARGET_NAME}_plugin_api,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
+
+
+target_link_libraries(${TARGET_NAME}_obj PRIVATE openvino::itt openvino::util openvino::core::dev)
+ie_mark_target_as_cc(${TARGET_NAME}_obj)
+
+ov_generate_plugins_hpp()
+
+
+set_ie_threading_interface_for(${TARGET_NAME}_obj)
+if (TBBBIND_2_5_FOUND)
+    target_link_libraries(${TARGET_NAME}_obj PRIVATE ${TBBBIND_2_5_IMPORTED_TARGETS})
+endif()
 
 # # Create library file from object library
 

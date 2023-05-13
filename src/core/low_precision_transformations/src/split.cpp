@@ -6,6 +6,7 @@
 #include "ngraph/node.hpp"
 
 #include <ngraph/pattern/op/wrap_type.hpp>
+#include <ngraph/validation_util.hpp>
 
 #include "low_precision/network_helper.hpp"
 #include "itt.hpp"

@@ -10,7 +10,7 @@
 #include <vector>
 #include <unordered_set>
 
-#include <ngraph/ngraph.hpp>
+//#include <ngraph/ngraph.hpp>
 #include <ngraph/pattern/matcher.hpp>
 #include <ngraph/opsets/opset1.hpp>
 #include "ov_ops/type_relaxed.hpp"

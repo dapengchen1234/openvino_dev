@@ -8,7 +8,7 @@
 #include <ngraph/opsets/opset1.hpp>
 
 #include <memory>
-#include <ngraph/node.hpp>
+// #include <ngraph/node.hpp>
 #include <ngraph/opsets/opset1.hpp>
 #include <ngraph/opsets/opset5.hpp>
 #include <ngraph/pattern/op/or.hpp>

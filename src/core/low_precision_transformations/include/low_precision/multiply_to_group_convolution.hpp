@@ -5,7 +5,7 @@
 #pragma once
 
 #include <memory>
-#include <ngraph/ngraph.hpp>
+//#include <ngraph/ngraph.hpp>
 #include "low_precision/layer_transformation.hpp"
 #include "common/precisions_restriction.hpp"
 

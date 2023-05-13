@@ -5,7 +5,7 @@
 #include "low_precision/transpose.hpp"
 
 #include <memory>
-#include <ngraph/ngraph.hpp>
+////#include <ngraph/ngraph.hpp>
 
 #include <ngraph/pattern/op/wrap_type.hpp>
 

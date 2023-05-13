@@ -6,7 +6,7 @@
 
 #include <memory>
 
-#include <ngraph/ngraph.hpp>
+////#include <ngraph/ngraph.hpp>
 #include <ngraph/pattern/op/wrap_type.hpp>
 #include "itt.hpp"
 #include "low_precision/network_helper.hpp"

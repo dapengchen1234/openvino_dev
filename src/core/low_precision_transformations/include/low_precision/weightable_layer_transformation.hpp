@@ -5,7 +5,7 @@
 #pragma once
 
 #include <memory>
-#include <ngraph/ngraph.hpp>
+//#include <ngraph/ngraph.hpp>
 #include "transformation_context.hpp"
 #include "layer_transformation.hpp"
 

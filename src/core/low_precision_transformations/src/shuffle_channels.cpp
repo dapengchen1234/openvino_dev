@@ -5,7 +5,8 @@
 #include "low_precision/shuffle_channels.hpp"
 
 #include <memory>
-#include <ngraph/ngraph.hpp>
+// //#include <ngraph/ngraph.hpp>
+#include <ngraph/validation_util.hpp>
 #include <ngraph/opsets/opset1.hpp>
 
 #include <ngraph/pattern/op/wrap_type.hpp>

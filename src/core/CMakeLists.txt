@@ -24,9 +24,9 @@ add_subdirectory(builder)
 add_subdirectory(reference)
 add_subdirectory(shape_inference)
 add_subdirectory(frontends)
-add_subdirectory(inference)
 add_subdirectory(transformations)
-
+add_subdirectory(inference)
+add_subdirectory(low_precision_transformations)
 
 file(GLOB_RECURSE LIBRARY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE LIBRARY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp)
@@ -54,32 +54,12 @@ ngraph::reference openvino::util openvino::pugixml
 ov_shape_inference openvino::core::dev openvino::itt)
 target_compile_definitions(ngraph_obj PRIVATE IMPLEMENT_OPENVINO_API )
 target_compile_definitions(ngraph_obj PRIVATE CI_BUILD_NUMBER="${CI_BUILD_NUMBER}")
-
+ov_add_version_defines(src/version.cpp ngraph_obj)
 ie_mark_target_as_cc(ngraph_obj)
 
 
 
-# set(MIXED_SRC
-#     "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/allocator.cpp"
-#     "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/itensor.cpp"
-#     "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/ov_tensor.cpp")
 
-# set_property(SOURCE ${MIXED_SRC}
-#     APPEND PROPERTY INCLUDE_DIRECTORIES
-#         ${OpenVINO_SOURCE_DIR}/src/core/inference/src)
-
-# Create named folders for the sources within the .vcproj
-# Empty name lists them directly under the .vcproj
-
-# source_group("src" FILES ${LIBRARY_SRC})
-# source_group("include" FILES ${PUBLIC_HEADERS})
-# add_library(ngraph_obj OBJECT ${LIBRARY_SRC})
-
-# target_include_directories(ngraph_obj, PUBLIC ${PUBLIC_HEADERS})
-# target_link_libraries(ngraph_obj PRIVATE ngraph::builder        
-# ngraph::reference openvino::util openvino::pugixml 
-# ov_shape_inference openvino::core::dev)
-# target_compile_definitions(ngraph_obj PRIVATE IMPLEMENT_OPENVINO_API)
 
 
 
@@ -232,37 +212,35 @@ ie_mark_target_as_cc(ngraph_obj)
 
 
 
-# # Defines macro in C++ to load backend plugin
-# target_include_directories(ngraph_obj PUBLIC $<BUILD_INTERFACE:${OV_CORE_INCLUDE_PATH}>
-#                                       PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+# Defines macro in C++ to load backend plugin
 
-# add_library(ngraph INTERFACE)
-# target_link_libraries(ngraph INTERFACE openvino::runtime)
-# # Add an alias so that library can be used inside the build tree, e.g. when testing
-# add_library(openvino::core ALIAS ngraph)
+add_library(ngraph INTERFACE)
+target_link_libraries(ngraph INTERFACE openvino::runtime)
+# Add an alias so that library can be used inside the build tree, e.g. when testing
+add_library(openvino::core ALIAS ngraph)
 
-# target_include_directories(ngraph INTERFACE $<BUILD_INTERFACE:${OV_CORE_INCLUDE_PATH}>)
+target_include_directories(ngraph INTERFACE $<BUILD_INTERFACE:${OV_CORE_INCLUDE_PATH}>)
 
-# #-----------------------------------------------------------------------------------------------
-# # Installation logic...
-# #-----------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------
+# Installation logic...
+#-----------------------------------------------------------------------------------------------
 
-# install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-#         DESTINATION ${OV_CPACK_INCLUDEDIR}
-#         COMPONENT ${OV_CPACK_COMP_CORE_DEV}
-#         FILES_MATCHING
-#             PATTERN "*.hpp"
-#             PATTERN "*.h")
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+        DESTINATION ${OV_CPACK_INCLUDEDIR}
+        COMPONENT ${OV_CPACK_COMP_CORE_DEV}
+        FILES_MATCHING
+            PATTERN "*.hpp"
+            PATTERN "*.h")
 
-# configure_package_config_file(${OpenVINO_SOURCE_DIR}/cmake/templates/ngraphConfig.cmake.in
-#     ${CMAKE_BINARY_DIR}/ngraphConfig.cmake
-#     INSTALL_DESTINATION ${OV_CPACK_NGRAPH_CMAKEDIR})
+configure_package_config_file(${OpenVINO_SOURCE_DIR}/cmake/templates/ngraphConfig.cmake.in
+    ${CMAKE_BINARY_DIR}/ngraphConfig.cmake
+    INSTALL_DESTINATION ${OV_CPACK_NGRAPH_CMAKEDIR})
 
-# write_basic_package_version_file(${CMAKE_BINARY_DIR}/ngraphConfigVersion.cmake
-#     VERSION ${OpenVINO_VERSION_MAJOR}.${OpenVINO_VERSION_MINOR}.${OpenVINO_VERSION_PATCH}
-#     COMPATIBILITY SameMajorVersion)
+write_basic_package_version_file(${CMAKE_BINARY_DIR}/ngraphConfigVersion.cmake
+    VERSION ${OpenVINO_VERSION_MAJOR}.${OpenVINO_VERSION_MINOR}.${OpenVINO_VERSION_PATCH}
+    COMPATIBILITY SameMajorVersion)
 
-# install(FILES ${CMAKE_BINARY_DIR}/ngraphConfig.cmake
-#               ${CMAKE_BINARY_DIR}/ngraphConfigVersion.cmake
-#         DESTINATION ${OV_CPACK_NGRAPH_CMAKEDIR}
-#         COMPONENT ${OV_CPACK_COMP_CORE_DEV})
+install(FILES ${CMAKE_BINARY_DIR}/ngraphConfig.cmake
+              ${CMAKE_BINARY_DIR}/ngraphConfigVersion.cmake
+        DESTINATION ${OV_CPACK_NGRAPH_CMAKEDIR}
+        COMPONENT ${OV_CPACK_COMP_CORE_DEV})

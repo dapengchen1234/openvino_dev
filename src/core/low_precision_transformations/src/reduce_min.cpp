@@ -4,7 +4,7 @@
 
 #include "low_precision/reduce_min.hpp"
 #include <memory>
-#include <ngraph/ngraph.hpp>
+// //#include <ngraph/ngraph.hpp>
 #include <ngraph/pattern/op/wrap_type.hpp>
 
 #include "low_precision/network_helper.hpp"

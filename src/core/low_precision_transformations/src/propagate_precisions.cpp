@@ -7,6 +7,7 @@
 #include <memory>
 
 #include <ngraph/opsets/opset1.hpp>
+#include <ngraph/pass/manager.hpp>
 #include <low_precision/create_attribute.hpp>
 #include "low_precision/rt_info/precisions_attribute.hpp"
 #include "low_precision/propagate_through_precision_preserved.hpp"

@@ -5,7 +5,7 @@
 #pragma once
 
 #include <map>
-#include <ngraph/ngraph.hpp>
+//#include <ngraph/ngraph.hpp>
 
 #include "common_test_utils/test_common.hpp"
 #include "layer_transformation.hpp"

@@ -176,7 +176,7 @@ endif()
 
 target_include_directories(${TARGET_NAME} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<TARGET_PROPERTY:openvino,INTERFACE_INCLUDE_DIRECTORIES>)
+   )
 
 # Static library used for unit tests which are always built
 

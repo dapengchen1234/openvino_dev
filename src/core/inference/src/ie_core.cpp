@@ -32,7 +32,7 @@
 #include "ie_plugin_config.hpp"
 #include "ie_remote_context.hpp"
 #include "ngraph/graph_util.hpp"
-#include "ngraph/ngraph.hpp"
+// #include "ngraph/ngraph.hpp"
 #include "ngraph/opsets/opset.hpp"
 #include "ngraph/pass/constant_folding.hpp"
 #include "openvino/core/except.hpp"

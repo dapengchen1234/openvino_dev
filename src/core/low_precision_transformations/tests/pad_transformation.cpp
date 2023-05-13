@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <low_precision/pad.hpp>
-#include <ngraph/ngraph.hpp>
+////#include <ngraph/ngraph.hpp>
 #include <sstream>
 #include <string>
 

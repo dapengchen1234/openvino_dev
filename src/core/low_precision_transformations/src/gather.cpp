@@ -5,7 +5,7 @@
 #include "low_precision/gather.hpp"
 
 #include <memory>
-#include <ngraph/ngraph.hpp>
+// //#include <ngraph/ngraph.hpp>
 #include <ngraph/opsets/opset1.hpp>
 #include <ngraph/opsets/opset7.hpp>
 #include <ngraph/opsets/opset8.hpp>

@@ -4,7 +4,8 @@
 
 #include "low_precision/reduce_base_transformation.hpp"
 #include <memory>
-#include <ngraph/ngraph.hpp>
+// //#include <ngraph/ngraph.hpp>
+#include <ngraph/validation_util.hpp>
 #include "low_precision/network_helper.hpp"
 
 namespace ngraph {

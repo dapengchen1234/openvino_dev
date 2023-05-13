@@ -6,6 +6,8 @@
 
 #include <algorithm>
 #include "low_precision/layer_transformation.hpp"
+#include <ngraph/validation_util.hpp>
+
 
 namespace ngraph {
 namespace pass {

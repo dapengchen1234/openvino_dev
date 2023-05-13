@@ -3,7 +3,7 @@
 //
 
 #include "low_precision/assign_and_read_value.hpp"
-#include <ngraph/ngraph.hpp>
+// //#include <ngraph/ngraph.hpp>
 
 #include <ngraph/pattern/op/wrap_type.hpp>
 #include "low_precision/network_helper.hpp"
