@@ -1,11 +1,6 @@
-// Copyright (C) 2018-2023 Intel Corporation
-// SPDX-License-Identifier: Apache-2.0
-//
-
 #include "ocl_device_detector.hpp"
 #include "ocl_device.hpp"
 #include "ocl_common.hpp"
-
 #include <string>
 #include <vector>
 #include <list>
@@ -255,8 +250,8 @@ std::vector<device::ptr> ocl_device_detector::create_device_list_from_user_devic
         // A non-NULL return value for clGetExtensionFunctionAddressForPlatform
         // does not guarantee that an extension function is actually supported
         // by the platform. The application must also make a corresponding query
-        // using clGetPlatformInfo (platform, CL_PLATFORM_EXTENSIONS, …​ ) or
-        // clGetDeviceInfo (device,CL_DEVICE_EXTENSIONS, …​ )
+        // using clGetPlatformInfo (platform, CL_PLATFORM_EXTENSIONS,) or
+        // clGetDeviceInfo (device,CL_DEVICE_EXTENSIONS,)
         // to determine if an extension is supported by the OpenCL implementation.
         const std::string& ext = platform.getInfo<CL_PLATFORM_EXTENSIONS>();
         if (ext.empty() || ext.find(INTEL_D3D11_SHARING_EXT_NAME) == std::string::npos) {

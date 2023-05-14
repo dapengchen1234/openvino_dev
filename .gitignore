@@ -20,6 +20,7 @@ cmake-build*
 compile_commands.json
 bin/
 install/
+install_bk/
 .local_vimrc
 .gdb_history
 .vimspector.json

@@ -144,10 +144,13 @@ target_compile_definitions(${TARGET_NAME}_obj PRIVATE
     $<TARGET_PROPERTY:frontend_common_obj,INTERFACE_COMPILE_DEFINITIONS>
     $<TARGET_PROPERTY:openvino_gapi_preproc,INTERFACE_COMPILE_DEFINITIONS>)
                        
+message("frontend_common_obj:" $<TARGET_PROPERTY:frontend_common_obj,INTERFACE_INCLUDE_DIRECTORIES>)
+message("openvino::pugixml:" $<TARGET_PROPERTY:openvino::pugixml,INTERFACE_INCLUDE_DIRECTORIES>)
 target_include_directories(${TARGET_NAME}_obj SYSTEM PRIVATE
-   $<BUILD_INTERFACE:${OV_CORE_INCLUDE_PATH}
+    $<BUILD_INTERFACE:${OV_CORE_INCLUDE_PATH}>
+    $<BUILD_INTERFACE:${FRONTEND_INCLUDE_DIR}>
     $<TARGET_PROPERTY:openvino::pugixml,INTERFACE_INCLUDE_DIRECTORIES>
-    $<BUILD_INTERFACE:${FRONTEND_INCLUDE_DIR}
+    $<TARGET_PROPERTY:frontend_common_obj,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:xbyak,INTERFACE_INCLUDE_DIRECTORIES>)
 
 # target_include_directories(${TARGET_NAME}_obj PRIVATE
@@ -242,13 +245,12 @@ ov_install_static_lib(${TARGET_NAME}_plugin_api ${OV_CPACK_COMP_CORE})
 
 # openvino_developer_export_targets(COMPONENT core_legacy TARGETS ${TARGET_NAME}_plugin_api)
 
-# # Install static libraries for case BUILD_SHARED_LIBS=OFF
+# Install static libraries for case BUILD_SHARED_LIBS=OFF
 
-# ov_install_static_lib(${TARGET_NAME}_plugin_api ${OV_CPACK_COMP_CORE})
 
-# install(DIRECTORY "${PUBLIC_HEADERS_DIR}/"
-#         DESTINATION ${OV_CPACK_INCLUDEDIR}
-#         COMPONENT ${OV_CPACK_COMP_CORE_DEV})
+install(DIRECTORY "${PUBLIC_HEADERS_DIR}/"
+        DESTINATION ${OV_CPACK_INCLUDEDIR}
+        COMPONENT ${OV_CPACK_COMP_CORE_DEV})
 
 # if(ENABLE_TESTS)
 #     add_subdirectory(tests)

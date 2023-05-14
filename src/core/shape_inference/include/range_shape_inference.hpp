@@ -1,12 +1,6 @@
-// Copyright (C) 2018-2023 Intel Corporation
-// SPDX-License-Identifier: Apache-2.0
-//
-
 #pragma once
-
 #include <openvino/core/validation_util.hpp>
 #include <openvino/op/range.hpp>
-
 #include "utils.hpp"
 namespace ov {
 namespace op {
@@ -100,7 +94,7 @@ void range_shape_infer(const Node* op,
             step = std::trunc(step);
         }
 
-        // the number of elements is: max(ceil((stop − start) / step), 0)
+        // the number of elements is: max(ceil((stop ? start) / step), 0)
         double span;
         if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
             span = 0;

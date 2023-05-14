@@ -28,13 +28,12 @@ add_library(${TARGET_NAME}_obj OBJECT ${LIBRARY_SRC} ${LIBRARY_HEADERS} ${LIBRAR
 if(NOT BUILD_SHARED_LIBS)
     ov_generate_frontends_hpp()
 endif()
-
+message("frontend_common:"   $<BUILD_INTERFACE:${FRONTEND_INCLUDE_DIR}>)
 target_include_directories(${TARGET_NAME}_obj
     PUBLIC
         $<BUILD_INTERFACE:${FRONTEND_INCLUDE_DIR}>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
-        #$<TARGET_PROPERTY:ngraph,INTERFACE_INCLUDE_DIRECTORIES>
         $<BUILD_INTERFACE:${OV_CORE_INCLUDE_PATH}>
         # for ov_frontends.hpp in static build
         ${CMAKE_CURRENT_BINARY_DIR}/src)
@@ -92,11 +91,11 @@ target_compile_definitions(${TARGET_NAME}_obj PRIVATE
 
 # # Installation rules header files
 
-# install(DIRECTORY ${FRONTEND_INCLUDE_DIR}/openvino
-#         DESTINATION ${FRONTEND_INSTALL_INCLUDE}
-#         COMPONENT ${OV_CPACK_COMP_CORE_DEV})
+install(DIRECTORY ${FRONTEND_INCLUDE_DIR}/openvino
+        DESTINATION ${FRONTEND_INSTALL_INCLUDE}
+        COMPONENT ${OV_CPACK_COMP_CORE_DEV})
 
-# # Shutdown protobuf library
-# if(Protobuf_IN_FRONTEND AND BUILD_SHARED_LIBS)
-#     add_subdirectory(shutdown_protobuf)
-# endif()
+# Shutdown protobuf library
+if(Protobuf_IN_FRONTEND AND BUILD_SHARED_LIBS)
+    add_subdirectory(shutdown_protobuf)
+endif()
