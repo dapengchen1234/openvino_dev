@@ -1,29 +1,25 @@
-// Copyright (C) 2018-2023 Intel Corporation
-// SPDX-License-Identifier: Apache-2.0
-//
-
 #pragma once
 #include "primitive.hpp"
 
 namespace cldnn {
 
-/// @brief SpaceToBatch operation divides "spatial" dimensions [1, ..., N - 1], N ∈ {4,5,6} of the data input
+/// @brief SpaceToBatch operation divides "spatial" dimensions [1, ..., N - 1], N \in {4,5,6} of the data input
 /// into a grid of blocks of shape block_shape, and interleaves these blocks with the batch dimension (0) such that in the output,
-/// the spatial dimensions [1, ..., N - 1], N ∈ {4,5,6} correspond to the position within the grid,
+/// the spatial dimensions [1, ..., N - 1], N \in {4,5,6} correspond to the position within the grid,
 /// and the batch dimension combines both the position within a spatial block and the original batch position.
 /// Prior to division into blocks, the spatial dimensions of the input are optionally zero padded according to pads_begin and pads_end.
 /// @details The SpaceToBatch operation is similar to the TensorFlow* operation SpaceToBatchND (https://www.tensorflow.org/api_docs/python/tf/space_to_batch_nd)
 /// There are 4 inputs of this operation:
-/// 1) data - input N-D tensor [batch, D_1, D_2 ... D_{N-1}], N ∈ {4,5,6}. Required.
-/// 2) block_shape - input 1-D tensor with shape [N], N ∈ {4,5,6}. Consists of block_sizes each of which specifies the size of the value block to be moved.
+/// 1) data - input N-D tensor [batch, D_1, D_2 ... D_{N-1}], N \in {4,5,6}. Required.
+/// 2) block_shape - input 1-D tensor with shape [N], N \in {4,5,6}. Consists of block_sizes each of which specifies the size of the value block to be moved.
 /// All values must be >= 1 and required. block_shape[0] is expected to be 1.
-/// 3) pads_begin - input 1-D tensor with shape [N], N ∈ {4,5,6}. Specifies the padding for the beginning along each axis of data input.
+/// 3) pads_begin - input 1-D tensor with shape [N], N \in {4,5,6}. Specifies the padding for the beginning along each axis of data input.
 /// All values must be non-negative and required. pads_begin[0] is expected to be 0.
-/// 4) pads_end - input 1-D tensor with shape [N], N ∈ {4,5,6}. Specifies the padding for the ending along each axis of data input.
+/// 4) pads_end - input 1-D tensor with shape [N], N \in {4,5,6}. Specifies the padding for the ending along each axis of data input.
 /// All values must be non-negative and required. pads_end[0] is expected to be 0.
 /// 3-4 inputs required that block_shape[i] divides data_shape[i] + pads_begin[i] + pads_end[i]
 ///
-/// The operation is equivalent to the following transformation of the input tensor data of shape [batch, D_1, D_2 ... D_{N - 1}], N ∈ {4,5,6}
+/// The operation is equivalent to the following transformation of the input tensor data of shape [batch, D_1, D_2 ... D_{N - 1}], N \in {4,5,6}
 /// and block_shape, pads_begin, pads_end of shapes [N] to Y output tensor.
 /// Zero-pad the start and end of dimensions [D_0, ..., D_{N - 1}] of the input according to `pads_begin` and `pads_end`
 ///

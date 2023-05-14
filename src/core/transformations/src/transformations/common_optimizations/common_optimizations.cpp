@@ -1,9 +1,4 @@
-// Copyright (C) 2018-2023 Intel Corporation
-// SPDX-License-Identifier: Apache-2.0
-//
-
 #include "transformations/common_optimizations/common_optimizations.hpp"
-
 #include <memory>
 #include <ngraph/pass/constant_folding.hpp>
 #include <ngraph/pass/manager.hpp>

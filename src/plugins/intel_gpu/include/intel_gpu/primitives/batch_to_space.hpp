@@ -1,10 +1,5 @@
-// Copyright (C) 2018-2023 Intel Corporation
-// SPDX-License-Identifier: Apache-2.0
-//
-
-#pragma once
+﻿#pragma once
 #include "primitive.hpp"
-
 namespace cldnn {
 
 /// @brief The BatchToSpace operation reshapes the "batch" dimension 0 into N - 1, N ∈ {4,5,6} dimensions of shape block_shape + [batch]

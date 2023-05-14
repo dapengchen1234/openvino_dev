@@ -1,7 +1,3 @@
-// Copyright (C) 2018-2023 Intel Corporation
-// SPDX-License-Identifier: Apache-2.0
-//
-
 #include "program_helpers.h"
 #include "pass_manager.h"
 
@@ -995,9 +991,9 @@ void prepare_primitive_fusing::fuse_simple_primitives(program &p) {
                 // In case of dynamic shapes we check that parent & peer shapes are compatible to allow merge
                 // This is required to avoid an issue when shape is partially defined and incorrectly propagated to further nodes
                 // which may ruin shape inference
-                // E.g. parent1 [?,?,768], parent2 [?,?,1]
-                // expected eltw out shape: [?,?,768]
-                // but w/o this check we can fuse eltwise to parent2 and return [?,?,1] as output shape which is unexpected
+                // E.g. parent1 [x,x,768], parent2 [1]
+                // expected eltw out shape: [x,x,768]
+                // but w/o this check we can fuse eltwise to parent2 and return [x,x,1] as output shape which is unexpected
                 auto parent1_pshape = parent1.first->get_output_layout().get_partial_shape();
                 auto parent2_pshape = parent2.first->get_output_layout().get_partial_shape();
                 auto out_pshape = node.get_output_layout().get_partial_shape();
@@ -1066,7 +1062,7 @@ void prepare_primitive_fusing::fuse_simple_primitives(program &p) {
             if (!supports_immad && fused_node->is_type<convolution>() && fused_node->get_users().size() > 1) {
                 // Allowed new pattern: Elt1, Act, Elt2, Elt3, Elt4 are fused to Conv1
                 // * Conv1 -> Eltw1(Add) -> Act(Clamp) -> Eltw2(Mul) -> Eltw3(Mul) -> Eltw4(Add) -> Conv2
-                // *   \â€“----------------------------------->/                          \---------> Eltw5(Div)
+                // *   \¨C----------------------------------->/                          \---------> Eltw5(Div)
                 //
                 // Extended eltwise fusiblity checking rules
                 //

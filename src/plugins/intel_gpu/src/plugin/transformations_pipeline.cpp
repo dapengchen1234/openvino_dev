@@ -23,6 +23,8 @@
 #include <ngraph/opsets/opset6.hpp>
 #include <ngraph/pass/manager.hpp>
 #include <ngraph/pass/constant_folding.hpp>
+#include <ngraph/validation_util.hpp>
+
 #include <ie_ngraph_utils.hpp>
 #include <ie_algorithm.hpp>
 

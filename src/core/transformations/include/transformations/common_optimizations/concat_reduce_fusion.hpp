@@ -1,7 +1,3 @@
-// Copyright (C) 2018-2023 Intel Corporation
-// SPDX-License-Identifier: Apache-2.0
-//
-
 #pragma once
 
 #include <openvino/pass/graph_rewrite.hpp>
@@ -43,9 +39,9 @@ public:
  * @brief ConcatReduceFusion pass replaces the following graph:
  *
  *               +---------------+            +---------------+
- *               â”‚               â”‚            |               |
- *               â”‚     input     â”‚            |     input     |
- *               â”‚               â”‚            |               |
+ *               â”?              â”?           |               |
+ *               â”?    input     â”?           |     input     |
+ *               â”?              â”?           |               |
  *               +---------------+            +----------------
  *                       |                            |
  *                       |                            |

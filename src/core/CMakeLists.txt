@@ -23,7 +23,7 @@ add_subdirectory(dev_api)
 add_subdirectory(builder)
 add_subdirectory(reference)
 add_subdirectory(shape_inference)
-add_subdirectory(frontends)
+add_subdirectory(frontends_common)
 add_subdirectory(transformations)
 add_subdirectory(inference)
 add_subdirectory(low_precision_transformations)
@@ -56,6 +56,10 @@ target_compile_definitions(ngraph_obj PRIVATE IMPLEMENT_OPENVINO_API )
 target_compile_definitions(ngraph_obj PRIVATE CI_BUILD_NUMBER="${CI_BUILD_NUMBER}")
 ov_add_version_defines(src/version.cpp ngraph_obj)
 ie_mark_target_as_cc(ngraph_obj)
+
+
+
+
 
 
 

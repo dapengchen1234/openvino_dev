@@ -1,9 +1,4 @@
-// Copyright (C) 2018-2023 Intel Corporation
-// SPDX-License-Identifier: Apache-2.0
-//
-
 #pragma once
-
 #include <memory>
 #include <openvino/pass/graph_rewrite.hpp>
 #include <transformations_visibility.hpp>
@@ -21,47 +16,47 @@ class TRANSFORMATIONS_API SoftmaxDecomposition;
  * @brief SoftmaxDecomposition transformation replaces softmax with following graph:
  *
  *            +---------------+
- *            â”‚               â”‚
- *            â”‚     input     â”‚
- *            â”‚               â”‚
+ *            ©¦               ©¦
+ *            ©¦     input     ©¦
+ *            ©¦               ©¦
  *            +---------------+
- *                â”‚      â”‚
- *                â”‚      v
- *                â”‚ +-----------+
- *                â”‚ â”‚           â”‚
- *                â”‚ â”‚ ReduceMax â”‚
- *                â”‚ â”‚           â”‚
- *                â”‚ +-----------+
- *                â”‚      â”‚
- *                â”‚      â”‚
+ *                ©¦      ©¦
+ *                ©¦      v
+ *                ©¦ +-----------+
+ *                ©¦ ©¦           ©¦
+ *                ©¦ ©¦ ReduceMax ©¦
+ *                ©¦ ©¦           ©¦
+ *                ©¦ +-----------+
+ *                ©¦      ©¦
+ *                ©¦      ©¦
  *                v      v
  *            +---------------+
- *            â”‚               â”‚
- *            â”‚      Sub      â”‚
- *            â”‚               â”‚
+ *            ©¦               ©¦
+ *            ©¦      Sub      ©¦
+ *            ©¦               ©¦
  *            +---------------+
  *                    |
  *                    |
  *                    v
  *            +---------------+
- *            â”‚               â”‚
- *            â”‚      Exp      â”‚
- *            â”‚               â”‚
+ *            ©¦               ©¦
+ *            ©¦      Exp      ©¦
+ *            ©¦               ©¦
  *            +---------------+
- *                â”‚      â”‚
- *                â”‚      v
- *                â”‚ +-----------+
- *                â”‚ â”‚           â”‚
- *                â”‚ â”‚ ReduceSum â”‚
- *                â”‚ â”‚           â”‚
- *                â”‚ +-----------+
- *                â”‚      â”‚
- *                â”‚      â”‚
+ *                ©¦      ©¦
+ *                ©¦      v
+ *                ©¦ +-----------+
+ *                ©¦ ©¦           ©¦
+ *                ©¦ ©¦ ReduceSum ©¦
+ *                ©¦ ©¦           ©¦
+ *                ©¦ +-----------+
+ *                ©¦      ©¦
+ *                ©¦      ©¦
  *                v      v
  *             +-------------+
- *             |             â”‚
- *             |     Div     â”‚
- *             â”‚             â”‚
+ *             |             ©¦
+ *             |     Div     ©¦
+ *             ©¦             ©¦
  *             +-------------+
  *
  */
