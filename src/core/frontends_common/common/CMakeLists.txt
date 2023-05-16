@@ -25,9 +25,11 @@ source_group("public include" FILES ${LIBRARY_PUBLIC_HEADERS})
 
 add_library(${TARGET_NAME}_obj OBJECT ${LIBRARY_SRC} ${LIBRARY_HEADERS} ${LIBRARY_PUBLIC_HEADERS})
 
-if(NOT BUILD_SHARED_LIBS)
-    ov_generate_frontends_hpp()
-endif()
+# if(NOT BUILD_SHARED_LIBS)
+#     ov_generate_frontends_hpp()
+# endif()
+
+
 message("frontend_common:"   $<BUILD_INTERFACE:${FRONTEND_INCLUDE_DIR}>)
 target_include_directories(${TARGET_NAME}_obj
     PUBLIC

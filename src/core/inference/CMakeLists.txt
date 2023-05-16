@@ -176,7 +176,7 @@ target_include_directories(${TARGET_NAME}_obj PRIVATE
 target_link_libraries(${TARGET_NAME}_obj PRIVATE openvino::itt openvino::util openvino::core::dev)
 ie_mark_target_as_cc(${TARGET_NAME}_obj)
 
-ov_generate_plugins_hpp()
+# ov_generate_plugins_hpp()
 
 
 set_ie_threading_interface_for(${TARGET_NAME}_obj)

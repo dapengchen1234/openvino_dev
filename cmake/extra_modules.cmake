@@ -136,6 +136,7 @@ endif()\n")
 
     # add each extra module
     foreach(module_path IN LISTS extra_modules)
+        message("module_path:" ${module_path})
         if(module_path)
             get_filename_component(module_name "${module_path}" NAME)
             set(build_module ON)
