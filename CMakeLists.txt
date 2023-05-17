@@ -140,7 +140,7 @@ add_subdirectory(src)
 
 
 
-# include(cmake/extra_modules.cmake)
+include(cmake/extra_modules.cmake)
 # # # provides a callback function to describe each component in repo
 # # include(cmake/packaging/packaging.cmake)
 # # ie_cpack(${IE_CPACK_COMPONENTS_ALL})
